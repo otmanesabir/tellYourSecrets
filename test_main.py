@@ -18,7 +18,7 @@ print(globalvalues.CFG)
 
 print("\n----------------- Completed -------------------------------")
 
-samurai_bs = app_info.app_info("Samurai Slash Run Slice", "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia", "https://apps.apple.com/us/app/samurai-slash-run-slice/id1535201167", dt.date.today)
-reviews = app_store.getReviews(samurai_bs, 20)
+samurai_bs = app_info.app_info("crap_ap", "Samurai Slash Run Slice", "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia", "https://apps.apple.com/us/app/samurai-slash-run-slice/id1535201167", dt.date.today)
+reviews = ps.search_app_name("Message", 0)
 for r in reviews:
     print(r)
