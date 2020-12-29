@@ -1,0 +1,5 @@
+appName: tellYourSecrets
+log_path: "logs/file.log"
+selenium:
+  driver_path: "/usr/local/bin/chromedriver"
+  headless: True
