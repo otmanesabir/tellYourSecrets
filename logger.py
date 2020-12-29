@@ -2,20 +2,32 @@
 
 import logging
 from config import global_config
+from logging.handlers import RotatingFileHandler
 
 cfg = global_config.global_config.get_instance().CFG
 
-logger = logging.getLogger(__name__)
+MAX_BYTES = 10000000 # Maximum size for a log file
+BACKUP_COUNT = 15 # Maximum number of old log files
 
-c_handler = logging.StreamHandler()
-f_handler = logging.FileHandler(cfg["log_path"])
-c_handler.setLevel(logging.INFO)
-f_handler.setLevel(logging.ERROR)
+def setup_custom_logger(name):
+    logger = logging.getLogger(name) 
+    logger.setLevel(logging.INFO) # the level should be the lowest level set in handlers
 
-c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-c_handler.setFormatter(c_format)
-f_handler.setFormatter(f_format)
+    log_format = logging.Formatter('[%(levelname)s] %(asctime)s - %(message)s')
 
-logger.addHandler(c_handler)
-logger.addHandler(f_handler)
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(log_format)
+    stream_handler.setLevel(logging.INFO)
+    logger.addHandler(stream_handler)
+
+    info_handler = RotatingFileHandler(cfg['log_path'] + 'info.log', maxBytes=MAX_BYTES, backupCount=BACKUP_COUNT)
+    info_handler.setFormatter(log_format)
+    info_handler.setLevel(logging.INFO)
+    logger.addHandler(info_handler)
+
+    error_handler = RotatingFileHandler(cfg['log_path'] + 'error.log', maxBytes=MAX_BYTES, backupCount=BACKUP_COUNT)
+    error_handler.setFormatter(log_format)
+    error_handler.setLevel(logging.ERROR)
+    logger.addHandler(error_handler)
+
+    return logger

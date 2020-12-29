@@ -1,5 +1,9 @@
 appName: tellYourSecrets
-log_path: "logs/file.log"
+
+# TODO ADD CONFIG FOR MAX SCHEDULER
+# TODO consider adding something for search range size. 
+
+log_path: "logs/"
 selenium:
   driver_path: "/usr/local/bin/chromedriver"
   headless: True
