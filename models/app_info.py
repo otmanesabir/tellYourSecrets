@@ -8,6 +8,27 @@ class app_info:
         self.apple_link = apple_link
         self.last_saved_review = last_saved_review
 
+
+    @staticmethod
+    def from_dict(source):
+        pass
+        # ...
+
+    def to_dict(self):
+        dest = {
+            u'bundle_id': self.bundle_id,
+            u'app_name': self.app_name,
+        }
+
+        if self.android_link is not None:
+            dest[u'android_link'] = self.android_link
+        if self.apple_link is not None:
+            dest[u'apple_link'] = self.apple_link
+        if self.last_saved_review is not None:
+            dest[u'last_saved_review'] = self.last_saved_review
+
+        return dest
+
     def __repr__(self):
         return(
             f'app_info(\
