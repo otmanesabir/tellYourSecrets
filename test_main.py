@@ -1,6 +1,7 @@
-import play_store as ps
+from models import app_info
+from crawlers import play_store as ps
+from crawlers import app_store
 import datetime as dt
-import app_info
 from config import global_config
 
 print(
@@ -15,9 +16,9 @@ globalvalues = global_config.global_config.get_instance()
 
 print(globalvalues.CFG)
 
-print("----------------- Completed -------------------------------")
+print("\n----------------- Completed -------------------------------")
 
-among_us = app_info.app_info("Among Us", "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia", "", dt.date.today)
-reviews = ps.getReviews(among_us, 10)
+samurai_bs = app_info.app_info("Samurai Slash Run Slice", "https://play.google.com/store/apps/details?id=com.innersloth.spacemafia", "https://apps.apple.com/us/app/samurai-slash-run-slice/id1535201167", dt.date.today)
+reviews = app_store.getReviews(samurai_bs, 20)
 for r in reviews:
     print(r)
