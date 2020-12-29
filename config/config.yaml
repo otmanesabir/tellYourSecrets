@@ -4,6 +4,9 @@ appName: tellYourSecrets
 # TODO consider adding something for search range size. 
 
 log_path: "logs/"
+
+firebase_credentials: "/Users/otmanesabir/tellyoursecrets-pro-firebase-adminsdk.json"
+
 selenium:
   driver_path: "/usr/local/bin/chromedriver"
   headless: True
