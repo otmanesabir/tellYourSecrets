@@ -67,6 +67,7 @@ def get_reviews(app_details, reviewLimit):
     driver = su.create_chrome_driver() 
     wait = WebDriverWait(driver, 10)
     review_list = []
+    new_date = None
     try:
         driver.get(app_details.apple_link + "#see-all/reviews")
         time.sleep(3)
@@ -81,8 +82,14 @@ def get_reviews(app_details, reviewLimit):
             temp_date = block.find_element_by_css_selector("time.we-customer-review__date").text
             r_date = datetime.strptime(temp_date, "%m/%d/%Y").date()
             r_desc = block.find_element_by_css_selector("div.we-clamp.ember-view").text
-            review_list.append(review_details.review_details(app_details.app_name, r_desc, r_date, r_rating))
-            log.info(f'Added review {len(review_list)}/{reviewLimit}') 
+            review_list.append(review_details.review_details(app_details.bundle_id, app_details.app_name, r_desc, r_date, r_rating))
+            log.info(f'Added review {len(review_list)}/{reviewLimit}')
+            if (new_date is None):
+                new_date = r_date
+        if (app_details.update_date(new_date)):
+            log.info(f"Updated last review date to: {new_date}")
+        else:
+            log.error(f"Failed to update the last review date.")
     except Exception as e:
         log.error("scraper failed" + str(e))
     finally:

@@ -1,4 +1,9 @@
-# uses the bundle ID as the file name and the main app identifier.
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+import logger
+
+log = logger.setup_custom_logger(__name__)
 
 class app_info:
     def __init__(self, bundle_id, app_name, android_link, apple_link, last_saved_review):
@@ -8,6 +13,33 @@ class app_info:
         self.apple_link = apple_link
         self.last_saved_review = last_saved_review
 
+    def __init_db(self):
+        db = firestore.client()
+        return db
+
+    def write_to_db(self):
+        db = self.__init_db()
+        if (self.bundle_id is None):
+            log.warning(f"Can't write an instance of app_info with no bundle_id")
+            return False
+        doc_ref = db.collection(u'apps').document(self.bundle_id)
+        if doc_ref.get().exists:
+            log.warning(f'Already exists. Updating {self.bundle_id}')
+            doc_ref.update(self.to_dict())
+        else:
+            doc_ref.set(self.to_dict())
+        return True
+    
+    def update_date(self, date):
+        db = self.__init_db()
+        if (self.bundle_id is None):
+            log.warning(f"Can't write an instance of app_info with no bundle_id")
+            return False
+        if (date is None):
+            return False
+        doc_ref = db.collection(u'apps').document(self.bundle_id)
+        doc_ref.update({u'last_saved_review': date.strftime('%m/%d/%Y')})
+        return True
 
     @staticmethod
     def from_dict(source):

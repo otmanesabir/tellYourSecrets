@@ -50,10 +50,9 @@ def get_reviews(app_details, reviewLimit):
     driver = su.create_chrome_driver() 
     wait = WebDriverWait(driver, 10)
     review_list = []
+    new_date = None
     try:
         driver.get(app_details.android_link + "&showAllReviews=true")
-        log.warning("launched webdriver")
-         ## Switch to newest view first
         dropdown = driver.find_element_by_css_selector("div.MocG8c.UFSXYb.LMgvRb.KKjvXb")
         dropdown.click()
          # TODO stop making it rely on random sleep
@@ -74,8 +73,14 @@ def get_reviews(app_details, reviewLimit):
             app_details.last_saved_review = r_date
             rating_wrapper = review.find_element_by_css_selector("span.nt2C1d")
             r_fullStars = len(rating_wrapper.find_elements_by_css_selector("div.vQHuPe.bUWb7c"))
-            review_list.append(review_details.review_details(r_app_name, r_desc, r_date, r_fullStars))
-            log.info(f'Added review {len(review_list)}/{reviewLimit}')   
+            review_list.append(review_details.review_details(app_details.bundle_id, r_app_name, r_desc, r_date, r_fullStars))
+            log.info(f'Added review {len(review_list)}/{reviewLimit}')
+            if new_date is None:
+                new_date = r_date
+        if (app_details.update_date(new_date)):
+            log.info(f"Updated last review date to: {new_date}")
+        else:
+            log.error(f"Failed to update the last review date.")
     except NoSuchElementException as e:
         log.error("scraper failed" + str(e))
     finally:
