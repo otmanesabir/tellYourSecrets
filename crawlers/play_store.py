@@ -15,6 +15,35 @@ from models import review_details
 from models import app_info
 import logger as lg
 
+def search_app_name(name, start_idx):
+    driver = su.create_chrome_driver() 
+    wait = WebDriverWait(driver, 10)
+    app_list = []
+    try:
+        driver.get(f'https://play.google.com/store/search?q={name}&c=apps')
+        # TODO switch to wait statement
+        app_table = driver.find_element_by_css_selector("div.Ktdaqe  ")
+        blocks = driver.find_elements_by_css_selector("div.ImZGtf.mpg5gc")
+        i = 0
+        for block in blocks:
+            if (i < start_idx):
+                i += 1
+                continue
+            if (len(app_list)) == 10:
+                prilg.logger.infont(f'Reached review limit: {reviewLimit}')
+                break
+            name_link = block.find_element_by_css_selector("div.b8cIId.ReQCgd.Q9MA7b")
+            r_appName = name_link.text
+            r_android_link = name_link.find_element_by_tag_name("a").get_attribute("href")
+            r_bundleID = r_android_link.split("id=")[1]
+            app_list.append(app_info.app_info(r_bundleID, r_appName, r_android_link, "", None))
+    except Exception as e:
+        lg.logger.error("scraper failed" + str(e))
+    finally:
+        driver.quit()
+    return app_list
+
+
 def getReviews(app_details, reviewLimit):
     driver = su.create_chrome_driver() 
     wait = WebDriverWait(driver, 10)
@@ -41,17 +70,14 @@ def getReviews(app_details, reviewLimit):
             r_app_name = app_details.app_name
             temp_date = review.find_element_by_css_selector("span.p2TkOb").text
             r_date = datetime.strptime(temp_date, '%B %d, %Y').date()
+            app_details.last_saved_review = r_date
             rating_wrapper = review.find_element_by_css_selector("span.nt2C1d")
             r_fullStars = len(rating_wrapper.find_elements_by_css_selector("div.vQHuPe.bUWb7c"))
             review_list.append(review_details(r_app_name, r_desc, r_date, r_fullStars))
+            app_details.last_saved_review = r_date
             print(f'Added review {len(review_list)}/{reviewLimit}')   
     except NoSuchElementException as e:
         lg.logger.error("scraper failed" + str(e))
     finally:
         driver.quit()
     return review_list
-
-
-def lookupApps(name, result_number):
-    # do something interesting
-    pass
