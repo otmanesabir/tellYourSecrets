@@ -7,10 +7,10 @@ import enum
 log = logger.setup_custom_logger(__name__)
 scraper_cfg = global_config.global_config.get_instance().CFG["crawler_settings"]
 
-class crawler_types(enum.Enum):
-   PLAY_STORE = 1
-   APP_STORE = 2
-   ALL = 3
+class crawler_types(str, enum.Enum):
+   PLAY_STORE = 'play store'
+   APP_STORE = 'app store'
+   ALL = 'all'
 
 class crawler_interface(metaclass=abc.ABCMeta):
     MAX_REVIEWS = scraper_cfg["review_limit"]
