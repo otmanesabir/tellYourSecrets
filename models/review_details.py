@@ -3,23 +3,15 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import logger
 
-# this needs to be a little smart.
-# basically in the reviews collection we find a subcollection of each bundle_id
-# each bundle_id has a bunch of these review_details documents
 
 # TODO somehow make reviews unique
-
 log = logger.setup_custom_logger(__name__)
 
-class review_details:
+class review_details(dict):
     def __init__(self, bundle_id, app_name, description, date, rating):
-        self.bundle_id = bundle_id
-        self.app_name = app_name
-        self.description = description
-        self.date = date
-        self.rating = rating
+        dict.__init__(bundle_id=bundle_id, app_name=app_name, description=description, date=date, rating=rating)
 
-    def __init_db(self):
+    def __init_db():
         db = firestore.client()
         return db
 

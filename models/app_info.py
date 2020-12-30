@@ -5,15 +5,11 @@ import logger
 
 log = logger.setup_custom_logger(__name__)
 
-class app_info:
+class app_info(dict):
     def __init__(self, bundle_id, app_name, android_link, apple_link, last_saved_review):
-        self.bundle_id = bundle_id
-        self.app_name = app_name
-        self.android_link = android_link
-        self.apple_link = apple_link
-        self.last_saved_review = last_saved_review
+        dict.__init__(self, bundle_id=bundle_id, app_name=app_name, android_link=android_link, apple_link=apple_link, last_saved_review=last_saved_review)
 
-    def __init_db(self):
+    def __init_db():
         db = firestore.client()
         return db
 
