@@ -1,22 +1,23 @@
-from models import app_info
-from crawlers import play_store as ps
-from crawlers import app_store
-import datetime as dt
+from celery.utils.collections import ChainMap
+from celery import chain
 from config import global_config
-import crwlr_manager as cm
+from crawlers import crawler_interface as ci
+from crawler_tasks import search_app as sa
+from crawler_tasks import get_reviews as gr
+
 
 print(
     """ 
-        ----------------------------------------------------------
-        Loading the global values of this environment.
-        -----------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        Launched sample file of the engine. Please make sure RabbitMQ & Celery are ready to run.
+        --------------------------------------------------------------------------------------------------------------
     """
 )
 # THe only place an Instance of global_values is created
-globalvalues = global_config.global_config.get_instance()
+config = global_config.global_config.get_instance().CFG
 
-print(globalvalues.CFG)
+print(config)
+
+processed_data = chain(sa.s(ci.crawler_types.PLAY_STORE, "Facebook", 0), gr.s()).apply_async().get()
 
 print("\n----------------- Completed -------------------------------")
-
-cm.sample_write("Idiot")
