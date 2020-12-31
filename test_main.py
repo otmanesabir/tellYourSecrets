@@ -1,5 +1,7 @@
-from celery.utils.collections import ChainMap
+from time import sleep
 from celery import chain
+from firebase_admin import credentials
+import firebase_admin
 from config import global_config
 from crawlers import crawler_interface as ci
 from crawler_tasks import search_app as sa
