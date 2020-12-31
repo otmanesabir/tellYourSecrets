@@ -1,9 +1,13 @@
-from firebase_admin import firestore
+from config.global_config import global_config
+from firebase_admin import credentials, firestore
 from dataclasses import dataclass
 import datetime
+
+import firebase_admin
 import logger
 
 log = logger.setup_custom_logger(__name__)
+config = global_config.get_instance().CFG
 
 @dataclass
 class app_info(dict):
@@ -30,7 +34,10 @@ class app_info(dict):
         lrw = dictionary["last_saved_review"]
         return obj(bi, an, al, apl, lrw)
      
-    def __init_db():
+    def __init_db(self):
+        if not firebase_admin._DEFAULT_APP_NAME in firebase_admin._apps:
+            cred = credentials.Certificate(config["firebase_credentials"])
+            firebase_admin.initialize_app(cred)
         db = firestore.client()
         return db
 

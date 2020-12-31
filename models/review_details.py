@@ -1,11 +1,15 @@
-from firebase_admin import firestore
+from config.global_config import global_config
+from firebase_admin import credentials, firestore
 from dataclasses import dataclass
 import datetime
+
+import firebase_admin
 import logger
 
 
 # TODO somehow make reviews unique
 log = logger.setup_custom_logger(__name__)
+config = global_config.get_instance().CFG
 
 @dataclass
 class review_details(dict):
@@ -21,7 +25,11 @@ class review_details(dict):
     @classmethod
     def from_dict(obj, dictionary):
         return obj(dictionary["bundle_id"], dictionary["app_name"], dictionary["description"], dictionary["date"], dictionary["rating"])
+    
     def __init_db():
+        if not firebase_admin._DEFAULT_APP_NAME in firebase_admin._apps:
+            cred = credentials.Certificate(config["firebase_credentials"])
+            firebase_admin.initialize_app(cred)
         db = firestore.client()
         return db
 
