@@ -1,16 +1,26 @@
-import firebase_admin
-from firebase_admin import credentials
 from firebase_admin import firestore
+from dataclasses import dataclass
+import datetime
 import logger
 
 
 # TODO somehow make reviews unique
 log = logger.setup_custom_logger(__name__)
 
+@dataclass
 class review_details(dict):
-    def __init__(self, bundle_id, app_name, description, date, rating):
-        dict.__init__(bundle_id=bundle_id, app_name=app_name, description=description, date=date, rating=rating)
+    bundle_id: str
+    app_name: str
+    description: str
+    date: datetime.date
+    rating: str
 
+    def __init__(self, bundle_id, app_name, description, date, rating):
+        dict.__init__(self, bundle_id=bundle_id, app_name=app_name, description=description, date=date, rating=rating)
+
+    @classmethod
+    def from_dict(obj, dictionary):
+        return obj(dictionary["bundle_id"], dictionary["app_name"], dictionary["description"], dictionary["date"], dictionary["rating"])
     def __init_db():
         db = firestore.client()
         return db

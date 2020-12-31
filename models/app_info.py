@@ -1,14 +1,35 @@
-import firebase_admin
-from firebase_admin import credentials
 from firebase_admin import firestore
+from dataclasses import dataclass
+import datetime
 import logger
 
 log = logger.setup_custom_logger(__name__)
 
+@dataclass
 class app_info(dict):
+    bundle_id: str
+    app_name: str
+    android_link: str
+    apple_link: str
+    last_saved_review: datetime.date
+
     def __init__(self, bundle_id, app_name, android_link, apple_link, last_saved_review):
+        self.bundle_id = bundle_id
+        self.app_name = app_name
+        self.android_link = android_link
+        self.apple_link = apple_link
+        self.last_saved_review = last_saved_review
         dict.__init__(self, bundle_id=bundle_id, app_name=app_name, android_link=android_link, apple_link=apple_link, last_saved_review=last_saved_review)
 
+    @classmethod
+    def from_dict(obj, dictionary):
+        bi = dictionary["bundle_id"]
+        an = dictionary["app_name"]
+        al = dictionary["android_link"]
+        apl = dictionary["apple_link"]
+        lrw = dictionary["last_saved_review"]
+        return obj(bi, an, al, apl, lrw)
+     
     def __init_db():
         db = firestore.client()
         return db
@@ -36,11 +57,6 @@ class app_info(dict):
         doc_ref = db.collection(u'apps').document(self.bundle_id)
         doc_ref.update({u'last_saved_review': date.strftime('%m/%d/%Y')})
         return True
-
-    @staticmethod
-    def from_dict(source):
-        pass
-        # ...
 
     def to_dict(self):
         dest = {
