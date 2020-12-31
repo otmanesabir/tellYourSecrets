@@ -20,8 +20,7 @@ log = lg.setup_custom_logger(__name__)
 
 class play_store_crawler(ci.crawler_interface):
     def get_reviews(self, app: app_info.app_info):
-        driver = su.create_chrome_driver() 
-        wait = WebDriverWait(driver, 10)
+        driver = su.create_chrome_driver()
         review_list = []
         new_date = None
         try:
