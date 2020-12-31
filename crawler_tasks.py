@@ -1,6 +1,8 @@
+from collections import namedtuple
 from celery import Celery, subtask, group
 from crawlers import play_store, app_store, crawler_interface
-from config import global_config
+from models import app_info as ai
+
 ct = crawler_interface.crawler_types
 
 ## celery -A crawler_tasks worker --loglevel=INFO
@@ -8,9 +10,10 @@ app = Celery('crawler_tasks', backend='rpc://', broker='pyamqp://', task_seriali
 
 @app.task
 def get_reviews(value):
-    crawler_type, apps = value
+    apps, crawler_type = value
     res = []
     for app_info in apps:
+        app_info = ai.app_info.from_dict(app_info)
         if (crawler_type == ct.PLAY_STORE):
             res.append(play_store.play_store_crawler().get_reviews(app_info))
         elif (crawler_type == ct.APP_STORE):
