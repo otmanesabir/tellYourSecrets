@@ -25,10 +25,10 @@ def get_reviews(crawler_type, apps):
     res = []
     if not type(apps) is list:
         apps = [apps]
-        print("converted to list")
     for app_info in apps:
         if not type(app_info) is ai.app_info:
             app_info = ai.app_info.from_dict(app_info)
+        app_info.write_to_db()
         if (crawler_type == ct.PLAY_STORE):
             res.append(play_store.play_store_crawler().get_reviews(app_info))
         elif (crawler_type == ct.APP_STORE):
