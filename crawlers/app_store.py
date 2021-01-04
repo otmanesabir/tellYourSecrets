@@ -47,9 +47,9 @@ class app_store_crawler(ci.crawler_interface):
             if (app.update_date(new_date)):
                 log.info(f"Updated last review date to: {new_date}")
             else:
-                log.error(f"Failed to update the last review date.")
+                log.warning(f"Failed to update the last review date.")
         except Exception as e:
-            log.error("scraper failed" + str(e))
+            log.error("scraper failed\n" + str(e))
         finally:
             driver.quit()
         return review_list 

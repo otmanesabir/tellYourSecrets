@@ -52,9 +52,9 @@ class play_store_crawler(ci.crawler_interface):
             if (app.update_date(new_date)):
                 log.info(f"Updated last review date to: {new_date}")
             else:
-                log.error(f"Failed to update the last review date.")
-        except NoSuchElementException as e:
-            log.error("scraper failed" + str(e))
+                log.warning(f"Failed to update the last review date.")
+        except Exception as e:
+            log.error("scraper failed\n" + str(e))
         finally:
             driver.quit()
         return review_list
@@ -80,7 +80,7 @@ class play_store_crawler(ci.crawler_interface):
                 r_bundleID = r_android_link.split("id=")[1]
                 app_list.append(app_info.app_info(r_bundleID, r_appName, r_android_link, None, None))
         except Exception as e:
-            log.error("scraper failed" + str(e))
+            log.error("scraper failed\n" + str(e))
         finally:
             driver.quit()
         return app_list
