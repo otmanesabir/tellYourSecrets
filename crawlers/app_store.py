@@ -70,7 +70,7 @@ class app_store_crawler(ci.crawler_interface):
                         i += 1
                         continue
                     if (len(app_list)) == self.APP_LIMIT:
-                        log.info(f'Reached review limit: {i}')
+                        log.info(f'App Store crawler reached app limit: {i}')
                         break
                     r_appName = item.find_element_by_css_selector("div.ember-view.ii-name").text
                     r_apple_link = item.find_element_by_css_selector("a.btn.btn-itunes.btn-itunes-buy").get_attribute("href")
