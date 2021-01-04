@@ -1,15 +1,13 @@
 appName: tellYourSecrets
 
-# TODO ADD CONFIG FOR MAX SCHEDULER
-# TODO consider adding something for search range size. 
-
 log_path: "logs/"
+flask_app: app.py
 
 firebase_credentials: "/Users/otmanesabir/tellyoursecrets-pro-firebase-adminsdk.json"
 
 crawler_settings:
-  review_limit: 20
-  app_limit: 10
+  review_limit: 3
+  app_limit: 3
 
 selenium:
   driver_path: "/usr/local/bin/chromedriver"
