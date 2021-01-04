@@ -15,7 +15,7 @@ print(config)
 
 print("\n----------------- LOADED CONFIG -------------------------------\n")
 
-payload = {'search_type': 'reviews', 'bundle_ids': ['com.facebook.analytics', 'com.facebook.games'], 'crawler': 'app store'} 
+payload = {'search_type': 'apps', 'keyword': 'Minecraft', 'crawler': 'app store', 'start_index':0} 
 r = requests.post("http://127.0.0.1:5000/post", json=payload)
 print(r.status_code)
 
