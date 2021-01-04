@@ -45,7 +45,6 @@ class review_details(dict):
         else:
             doc_ref.set({u'reviews': [self.to_dict()]})
         return True
-
     
     def to_dict(self):
         dest = {

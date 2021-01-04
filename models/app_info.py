@@ -29,12 +29,16 @@ class app_info(dict):
     def from_dict(obj, dictionary):
         bi = dictionary["bundle_id"]
         an = dictionary["app_name"]
-        al = dictionary["android_link"]
-        apl = dictionary["apple_link"]
-        lrw = dictionary["last_saved_review"]
+        al = apl = lrw = None
+        if dictionary.get("android_link") != None:
+            al = dictionary["android_link"]
+        if dictionary.get("apple_link") != None:
+            apl = dictionary["apple_link"]
+        if dictionary.get("last_saved_review") != None:
+            lrw = dictionary["last_saved_review"]
         return obj(bi, an, al, apl, lrw)
      
-    def __init_db(self):
+    def __init_db():
         if not firebase_admin._DEFAULT_APP_NAME in firebase_admin._apps:
             cred = credentials.Certificate(config["firebase_credentials"])
             firebase_admin.initialize_app(cred)
@@ -57,13 +61,35 @@ class app_info(dict):
     def update_date(self, date):
         db = self.__init_db()
         if (self.bundle_id is None):
-            log.warning(f"Can't write an instance of app_info with no bundle_id")
+            log.error(f"Can't write an instance of app_info with no bundle_id")
             return False
         if (date is None):
             return False
         doc_ref = db.collection(u'apps').document(self.bundle_id)
         doc_ref.update({u'last_saved_review': date.strftime('%m/%d/%Y')})
         return True
+    
+    @classmethod
+    def load_from_bundle_id(self, bundle_id):
+        if not type(bundle_id) is list:
+            bundle_id = [bundle_id]
+        if not bundle_id[0]:
+            log.error(f"Can't load an instance of app_info with no bundle_id")
+            raise Exception("Invalid bundle id.")
+        db = self.__init_db()
+        apps = []
+        for id in bundle_id:
+            doc_ref = db.collection(u'apps').document(id)
+            if not doc_ref.get().exists:
+                log.warning(f"App with {id} does not exist")
+            else:
+                apps.append(self.from_dict(doc_ref.get().to_dict()))
+        log.info(f"Succesfully loaded {len(apps)}/{len(bundle_id)} apps.")
+        if len(apps) == 1:
+            return apps[0]
+        else:
+            return apps
+
 
     def to_dict(self):
         dest = {
