@@ -1,11 +1,5 @@
-from time import sleep
-from celery import chain
-from firebase_admin import credentials
-import firebase_admin
+import requests
 from config import global_config
-from crawlers import crawler_interface as ci
-from crawler_tasks import search_app as sa
-from crawler_tasks import get_reviews as gr
 
 
 print(
@@ -17,9 +11,13 @@ print(
 )
 # THe only place an Instance of global_values is created
 config = global_config.global_config.get_instance().CFG
-
 print(config)
 
-processed_data = chain(sa.s(ci.crawler_types.PLAY_STORE, "Facebook", 0), gr.s()).apply_async().get()
+print("\n----------------- LOADED CONFIG -------------------------------")
+
+payload = {'search_type': 'apps', 'keyword': 'Facebook', 'crawler': 'play store', 'start_index': 0} 
+r = requests.post("http://127.0.0.1:5000/post", json=payload)
+print(r.status_code)
+
 
 print("\n----------------- Completed -------------------------------")
