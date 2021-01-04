@@ -37,7 +37,8 @@ class app_info(dict):
         if dictionary.get("last_saved_review") != None:
             lrw = dictionary["last_saved_review"]
         return obj(bi, an, al, apl, lrw)
-     
+    
+    @staticmethod
     def __init_db():
         if not firebase_admin._DEFAULT_APP_NAME in firebase_admin._apps:
             cred = credentials.Certificate(config["firebase_credentials"])
@@ -46,7 +47,7 @@ class app_info(dict):
         return db
 
     def write_to_db(self):
-        db = self.__init_db()
+        db = app_info.__init_db()
         if (self.bundle_id is None):
             log.warning(f"Can't write an instance of app_info with no bundle_id")
             return False
@@ -59,7 +60,7 @@ class app_info(dict):
         return True
     
     def update_date(self, date):
-        db = self.__init_db()
+        db = app_info.__init_db()
         if (self.bundle_id is None):
             log.error(f"Can't write an instance of app_info with no bundle_id")
             return False

@@ -6,8 +6,8 @@ flask_app: app.py
 firebase_credentials: "/Users/otmanesabir/tellyoursecrets-pro-firebase-adminsdk.json"
 
 crawler_settings:
-  review_limit: 3
-  app_limit: 3
+  review_limit: 10
+  app_limit: 15
 
 selenium:
   driver_path: "/usr/local/bin/chromedriver"

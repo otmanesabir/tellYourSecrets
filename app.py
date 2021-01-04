@@ -31,7 +31,7 @@ def get_request():
     if (data["search_type"] == "apps"):
         results = sa.delay(data["crawler"], data["keyword"], data["start_index"]).get()
         gr.delay(data["crawler"], results) # don't really need to wait for these results.
-        dictToSend = {'bundle_ids': [d['value'] for d in results]}
+        dictToSend = {'bundle_ids': [d['bundle_id'] for d in results]}
         # TODO SEND TO THE WEB APP
         res = requests.post('http://localhost:5000/post/receive/apps', json=dictToSend)
         print('response from server:', res.status_code)
