@@ -43,3 +43,4 @@ nodeLanguageServer/**
 nodeLanguageServer.*/**
 logs/*
 .vscode/*
+erl_crash.dump

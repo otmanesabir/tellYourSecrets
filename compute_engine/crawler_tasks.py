@@ -1,7 +1,6 @@
-from collections import namedtuple
 from celery import Celery, subtask, group
-from crawlers import play_store, app_store, crawler_interface
-from models import app_info as ai
+from .crawlers import play_store, app_store, crawler_interface
+from .models import app_info as ai
 
 ct = crawler_interface.crawler_types
 

@@ -1,5 +1,5 @@
 import requests
-from config import global_config
+from .config import global_config
 
 
 print(
