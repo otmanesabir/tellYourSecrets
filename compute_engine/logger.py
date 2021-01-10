@@ -1,7 +1,7 @@
 ## LOGGING UTILS
 
 import logging
-from config import global_config
+from .config import global_config
 from logging.handlers import RotatingFileHandler
 
 cfg = global_config.global_config.get_instance().CFG

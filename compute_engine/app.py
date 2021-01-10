@@ -1,10 +1,10 @@
 from flask import Flask, request
 from flask.helpers import make_response
-from crawler_tasks import search_app as sa
-from crawler_tasks import get_reviews as gr
-from models import app_info as ai
+from .crawler_tasks import search_app as sa
+from .crawler_tasks import get_reviews as gr
+from .models import app_info as ai
 import requests
-import logger
+from . import logger
 
 
 app = Flask(__name__)
